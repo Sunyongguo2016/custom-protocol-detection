@@ -12,3 +12,24 @@ The implementation is different from one browser to another, sometimes depend on
 
 * In some protocol such as "mailto:", IE seems to trigger the fail callback while continuing on opening the protocol just fine (tested in IE11/Win 10). This issue doesn't occur with a custom protocol.
 * Edge, in contrast, never fail anything as it will just offer users to find an app in Windows Store to open an unknown protocol.
+
+# 协议相应超过1秒导致失败
+
+* protocolcheck.js -->openUriWithTimeoutHack 改超时时间6000ms; 由于测试协议，协议返回时间容易超出1秒，改这里即可
+
+```
+ var timeout = setTimeout(function () {
+        failCb();
+        handler.remove();
+    }, 6000);
+```
+
+# iframe使用 页面嵌套导致失败
+
+* protocolcheck.js -->openUriWithTimeoutHack,可以试试注释掉如下代码 try it!
+
+```
+//while (target != target.parent) {
+//        target = target.parent;
+//    }
+```
